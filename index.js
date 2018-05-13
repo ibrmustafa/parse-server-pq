@@ -15,7 +15,7 @@ var api = new ParseServer({
     serverURL: process.env.SERVER_URL,
     allowClientClassCreation: process.env.CLIENT_CLASS_CREATION || true, 
     appId: process.env.APP_ID,
-    masterKey: process.env.MASTER_KEY || 'BBE13849E88A86AEBE19377D4B56F23EFE762B523620A877B8BE17FDA3DD44FE',
+    masterKey: 'BBE13849E88A86AEBE19377D4B56F23EFE762B523620A877B8BE17FDA3DD44FE',
     publicServerURL: 'https://peppequeue.herokuapp.com/parse',
     verifyUserEmails: true,
     appName: "peppequeue",
