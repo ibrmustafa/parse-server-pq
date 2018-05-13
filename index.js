@@ -1,4 +1,5 @@
 const resolve = require('path').resolve;
+
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
@@ -22,9 +23,9 @@ var api = new ParseServer({
     appName: "peppequeue",
     
     emailAdapter: {
-	module: 'parse-server-mailgun',
+	module:'@parse/simple-mailgun-adapter',
 	options: {
-	    fromAddress: 'PeppeQ<noreply@yourapp.com>',
+	    fromAddress: process.env.FROM_EMAIL,
 	    domain: 'sandboxde091df17c3a43f18a3ac8367421432e.mailgun.org',
 	    apiKey: 'key-ea1fb115983b4f6fcdd57154d083023c',
 
