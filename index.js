@@ -20,38 +20,49 @@ var api = new ParseServer({
 	// allowClientClassCreation: process.env.CLIENT_CLASS_CREATION || false, 
 	appId: process.env.APP_ID || 'myAppId',
 	masterKey: process.env.MASTER_KEY || 'myMasterKey', //Add your master key here. Keep it secret!	
-	
-	//**** Live Query ****//
-	// liveQuery: {
-	// 	classNames: ["TestObject", "Place", "Team", "Player", "ChatMessage"] // List of classes to support for query subscriptions
-	// },
 
-	//**** Email Verification ****//
-	/* Enable email verification */
-	// verifyUserEmails: true,
-	/* The public URL of your app */
-	// This will appear in the link that is used to verify email addresses and reset passwords.
-	/* Set the mount path as it is in serverURL */
-	// publicServerURL: process.env.SERVER_URL || 'http://localhost:1337/parse',
-	/* This will appear in the subject and body of the emails that are sent */
-	// appName: process.env.APP_NAME || "CodeCraft", 
+   ,
+  publicServerURL: 'https://peppequeue.herokuapp.com/parse',
+  verifyUserEmails: true,
+  appName: "peppequeue",
+  emailAdapter: {
+    module: 'parse-server-mailgun',
+    options: {
+      // The address that your emails come from
+      fromAddress: 'PeppeQ<noreply@yourapp.com>',
+      // Your domain from mailgun.com
+      domain: 'sandboxde091df17c3a43f18a3ac8367421432e.mailgun.org',
+      // Your API key from mailgun.com
+      apiKey: 'key-ea1fb115983b4f6fcdd57154d083023c',
 
-	// emailAdapter: {
-	// 	module: 'parse-server-simple-mailgun-adapter',
-	// 	options: {
-	// 		fromAddress: process.env.EMAIL_FROM || "test@example.com",
-	// 		domain: process.env.MAILGUN_DOMAIN || "example.com",
-	// 		apiKey: process.env.MAILGUN_API_KEY  || "apikey"
-	// 	}
-	// },
-	
-	//**** File Storage ****//
-	// filesAdapter: new S3Adapter(
-	// 	{
-	// 		directAccess: true
-	// 	}
-	// )
+      // The template section
+      templates: {
+        passwordResetEmail: {
+          subject: 'Reset your password',
+          pathPlainText: resolve(__dirname, 'public/email-templates/password_reset_email.txt'),
+          pathHtml: resolve(__dirname, 'public/email-templates/password_reset_email.html'),
+          callback: (user) => { return { firstName: user.get('firstName') }}
+          // Now you can use {{firstName}} in your templates
+        },
+        verificationEmail: {
+          subject: 'Confirm your account',
+          pathPlainText: resolve(__dirname, 'public/email-templates/verification_email.txt'),
+          pathHtml: resolve(__dirname, 'public/email-templates/verification_email.html'),
+          callback: (user) => { return { firstName: user.get('firstName') }}
+          // Now you can use {{firstName}} in your templates
+        },
+        customEmailAlert: {
+          subject: 'Urgent notification!',
+          pathPlainText: resolve(__dirname, 'public/email-templates/custom_alert.txt'),
+          pathHtml: resolve(__dirname, 'public/email-templates/custom_alert.html'),
+        }
+      }
+  }
 });
+
+
+
+
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
 // If you wish you require them, you can set them as options in the initialization above:
 // javascriptKey, restAPIKey, dotNetKey, clientKey
