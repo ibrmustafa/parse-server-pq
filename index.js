@@ -23,7 +23,7 @@ var api = new ParseServer({
     appName: "peppequeue",
     
     emailAdapter: {
-	module: 'parse-server-simple-mailgun-adapter',
+	module: 'parse-server-mailgun',
 	options: {
 	    fromAddress: process.env.EMAIL_FROM,
 	    domain: process.env.MAILGUN_DOMAIN,
