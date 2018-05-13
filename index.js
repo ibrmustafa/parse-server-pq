@@ -33,14 +33,12 @@ var api = new ParseServer({
 		    pathPlainText: resolve(__dirname, 'public/email-templates/password_reset_email.txt'),
 		    pathHtml: resolve(__dirname, 'public/email-templates/password_reset_email.html'),
 		    callback: (user) => { return { firstName: user.get('firstName') }}
-		    // Now you can use {{firstName}} in your templates
 		},
 		verificationEmail: {
 		    subject: 'Confirm your account',
 		    pathPlainText: resolve(__dirname, 'public/email-templates/verification_email.txt'),
 		    pathHtml: resolve(__dirname, 'public/email-templates/verification_email.html'),
 		    callback: (user) => { return { firstName: user.get('firstName') }}
-		    // Now you can use {{firstName}} in your templates
 		},
 		customEmailAlert: {
 		    subject: 'Urgent notification!',
@@ -49,7 +47,8 @@ var api = new ParseServer({
 		}
 	    }
 	}
-    });
+    }
+});
 
 
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
