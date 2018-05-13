@@ -1,7 +1,7 @@
 function Dashboard(){
 	
 }
-var Config = new Config();
+
 Dashboard.init = function() {
 	Parse.initialize(Config.PARSE_APP_ID);
   Parse.serverURL = Config.PARSE_SERVER_URL;

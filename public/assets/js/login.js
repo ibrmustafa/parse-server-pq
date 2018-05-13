@@ -1,7 +1,7 @@
 function Login(){
 	
 }
-var Config = new Config();
+
 Login.init = function() {
 	$("#signUpDiv").hide();
 	$("#newSignUp").click(function() {		    
