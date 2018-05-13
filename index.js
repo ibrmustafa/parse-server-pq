@@ -14,11 +14,11 @@ var api = new ParseServer({
 
     databaseURI: 'mongodb://heroku_cknf11mk:jsu11t38acphq6v2s6ht8baln7@ds147070.mlab.com:47070/heroku_cknf11mk',//process.env.MONGODB_URI,
     cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-    serverURL: process.env.SERVER_URL || 'https://peppequeue-web-sample.herokuapp.com/parse',
+    serverURL: process.env.SERVER_URL || 'https://peppeq-mahesh.herokuapp.com/parse',
     allowClientClassCreation: process.env.CLIENT_CLASS_CREATION || true, 
     appId: process.env.APP_ID || 'mySampleAppID',
     masterKey: process.env.MASTER_KEY || 'myMasterKey',
-    publicServerURL: process.env.SERVER_URL || 'https://peppequeue-web-sample.herokuapp.com/parse',
+    publicServerURL: process.env.SERVER_URL || 'https://peppeq-mahesh.herokuapp.com/parse',
     verifyUserEmails: true,
     appName: "peppequeue",
     
