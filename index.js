@@ -1,6 +1,6 @@
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
-var S3Adapter = require('parse-server').S3Adapter;
+ var S3Adapter = require('parse-server').S3Adapter;
 var path = require('path');
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI;
@@ -10,48 +10,48 @@ if (!databaseUri) {
 }
 
 var api = new ParseServer({
+	//**** General Settings ****//
 
-    databaseURI: process.env.MONGODB_URI,
-    cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-    serverURL: process.env.SERVER_URL,
-    allowClientClassCreation: process.env.CLIENT_CLASS_CREATION || true, 
-    appId: process.env.APP_ID,
-    masterKey: process.env.MASTER_KEY,
-    publicServerURL: 'https://peppequeue.herokuapp.com/parse',
-    verifyUserEmails: true,
-    appName: "peppequeue",
-    
-    emailAdapter: {
-	module: 'parse-server-mailgun',
-	options: {
-	    fromAddress: 'PeppeQ<noreply@yourapp.com>',
-	    domain: 'sandboxde091df17c3a43f18a3ac8367421432e.mailgun.org',
-	    apiKey: 'key-ea1fb115983b4f6fcdd57154d083023c',
+	databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
+	cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
+	serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
+	
+	//**** Security Settings ****//
+	// allowClientClassCreation: process.env.CLIENT_CLASS_CREATION || false,
+	appId: process.env.APP_ID || 'myAppId',
+	masterKey: process.env.MASTER_KEY || 'myMasterKey', //Add your master key here. Keep it secret!	
+	
+	//**** Live Query ****//
+	 liveQuery: {
+	 	classNames: ["TestObject", "Place", "Team", "Player", "ChatMessage"] // List of classes to support for query subscriptions
+	 },
 
-	    templates: {
-		passwordResetEmail: {
-		    subject: 'Reset your password',
-		    pathPlainText: resolve(__dirname, 'public/email-templates/password_reset_email.txt'),
-		    pathHtml: resolve(__dirname, 'public/email-templates/password_reset_email.html'),
-		    callback: (user) => { return { firstName: user.get('firstName') }}
-		},
-		verificationEmail: {
-		    subject: 'Confirm your account',
-		    pathPlainText: resolve(__dirname, 'public/email-templates/verification_email.txt'),
-		    pathHtml: resolve(__dirname, 'public/email-templates/verification_email.html'),
-		    callback: (user) => { return { firstName: user.get('firstName') }}
-		},
-		customEmailAlert: {
-		    subject: 'Urgent notification!',
-		    pathPlainText: resolve(__dirname, 'public/email-templates/custom_alert.txt'),
-		    pathHtml: resolve(__dirname, 'public/email-templates/custom_alert.html'),
-		}
-	    }
-	}
-    }
+	//**** Email Verification ****//
+	/* Enable email verification */
+	 verifyUserEmails: true,
+	/* The public URL of your app */
+	// This will appear in the link that is used to verify email addresses and reset passwords.
+	/* Set the mount path as it is in serverURL */
+	 publicServerURL: process.env.SERVER_URL || 'http://localhost:1337/parse',
+	/* This will appear in the subject and body of the emails that are sent */
+	 appName: process.env.APP_NAME || "CodeCraft",
+
+	 emailAdapter: {
+	 	module: 'parse-server-simple-mailgun-adapter',
+	 	options: {
+	 		fromAddress: process.env.EMAIL_FROM || "test@example.com",
+	 		domain: process.env.MAILGUN_DOMAIN || "example.com",
+	 		apiKey: process.env.MAILGUN_API_KEY  || "apikey"
+	 	}
+	 },
+	
+	//**** File Storage ****//
+	// filesAdapter: new S3Adapter(
+	// 	{
+	// 		directAccess: true
+	// 	}
+	// )
 });
-
-
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
 // If you wish you require them, you can set them as options in the initialization above:
 // javascriptKey, restAPIKey, dotNetKey, clientKey
@@ -65,9 +65,12 @@ app.use('/public', express.static(path.join(__dirname, '/public')));
 var mountPath = process.env.PARSE_MOUNT || '/parse';
 app.use(mountPath, api);
 
-// Parse Server plays nicely with the rest of your web routes
 app.get('/', function (req, res) {
-	res.sendFile(path.join(__dirname, '/public/login.html'));
+	res.sendFile(path.join(__dirname, '/public/index.html'));
+});
+
+app.get('/about', function (req, res) {
+	res.sendFile(path.join(__dirname, '/public/about.html'));
 });
 
 // There will be a test page available on the /test path of your server url
