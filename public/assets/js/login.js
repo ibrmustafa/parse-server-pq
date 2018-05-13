@@ -19,8 +19,8 @@ Login.init = function() {
     $('#forgotPasswordLink').click(Login.clickForgotPasswordLink);
 
 	//initialize parse
-	Parse.initialize("MyPeppeSampleApp");
-    Parse.serverURL = 'https://peppequeue-web-sample.herokuapp.com/parse';
+	Parse.initialize(Config.PARSE_APP_ID);
+  Parse.serverURL = Config.PARSE_SERVER_URL;
 }
 
 Login.clickSignUpButton = function(){
