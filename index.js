@@ -1,5 +1,6 @@
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
+var S3Adapter = require('parse-server').S3Adapter;
 var path = require('path');
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI;
@@ -15,7 +16,7 @@ var api = new ParseServer({
     serverURL: process.env.SERVER_URL,
     allowClientClassCreation: process.env.CLIENT_CLASS_CREATION || true, 
     appId: process.env.APP_ID,
-    masterKey: 'BBE13849E88A86AEBE19377D4B56F23EFE762B523620A877B8BE17FDA3DD44FE',
+    masterKey: process.env.MASTER_KEY ||,
     publicServerURL: 'https://peppequeue.herokuapp.com/parse',
     verifyUserEmails: true,
     appName: "peppequeue",
