@@ -25,9 +25,9 @@ var api = new ParseServer({
     emailAdapter: {
 	module: 'parse-server-simple-mailgun-adapter',
 	options: {
-	    fromAddress: process.env.FROM_EMAIL,
-	    domain: 'sandboxde091df17c3a43f18a3ac8367421432e.mailgun.org',
-	    apiKey: 'key-ea1fb115983b4f6fcdd57154d083023c',
+	    fromAddress: process.env.EMAIL_FROM,
+	    domain: process.env.MAILGUN_DOMAIN,
+	    apiKey: process.env.MAILGUN_API_KEY,
 
 	    templates: {
 		passwordResetEmail: {
