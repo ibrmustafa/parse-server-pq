@@ -1,3 +1,5 @@
+const resolve = require('path').resolve;
+
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
@@ -23,9 +25,9 @@ var api = new ParseServer({
     emailAdapter: {
 	module: 'parse-server-mailgun',
 	options: {
-	    fromAddress: 'PeppeQ<noreply@yourapp.com>',
-	    domain: 'sandboxde091df17c3a43f18a3ac8367421432e.mailgun.org',
-	    apiKey: 'key-ea1fb115983b4f6fcdd57154d083023c',
+	    fromAddress: process.env.EMAIL_FROM,
+	    domain: process.env.MAILGUN_DOMAIN,
+	    apiKey: process.env.MAILGUN_API_KEY,
 
 	    templates: {
 		passwordResetEmail: {
@@ -49,16 +51,11 @@ var api = new ParseServer({
 		}
 	    }
 	}
-    });
-
-
-// Client-keys like the javascript key or the .NET key are not necessary with parse-server
-// If you wish you require them, you can set them as options in the initialization above:
-// javascriptKey, restAPIKey, dotNetKey, clientKey
+    }
+});
 
 var app = express();
 
-// Serve static assets from the /public folder
 app.use('/public', express.static(path.join(__dirname, '/public')));
 
 // Serve the Parse API on the /parse URL prefix
@@ -86,4 +83,5 @@ httpServer.listen(port, function () {
 
 
 // This will enable the Live Query real-time server
-ParseServer.createLiveQueryServer(httpServer);
+			  ParseServer.createLiveQueryServer(httpServer);
+			  
