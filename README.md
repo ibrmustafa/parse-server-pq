@@ -1,4 +1,4 @@
-# parse-server-example
+# PeppeQueue Parse Server
 
 Example project using the [parse-server](https://github.com/ParsePlatform/parse-server) module on Express.
 
