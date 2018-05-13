@@ -1,6 +1,5 @@
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
-// var S3Adapter = require('parse-server').S3Adapter;
 var path = require('path');
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI;
@@ -10,57 +9,47 @@ if (!databaseUri) {
 }
 
 var api = new ParseServer({
-	//**** General Settings ****//
 
-	databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
-	cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-	serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
-	
-	//**** Security Settings ****//
-	// allowClientClassCreation: process.env.CLIENT_CLASS_CREATION || false, 
-	appId: process.env.APP_ID || 'myAppId',
-	masterKey: process.env.MASTER_KEY || 'myMasterKey', //Add your master key here. Keep it secret!	
+    databaseURI: process.env.MONGODB_URI,
+    cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
+    serverURL: process.env.SERVER_URL,
+    allowClientClassCreation: process.env.CLIENT_CLASS_CREATION || true, 
+    appId: process.env.APP_ID,
+    masterKey: process.env.MASTER_KEY,
+    publicServerURL: 'https://peppequeue.herokuapp.com/parse',
+    verifyUserEmails: true,
+    appName: "peppequeue",
+    
+    emailAdapter: {
+	module: 'parse-server-mailgun',
+	options: {
+	    fromAddress: 'PeppeQ<noreply@yourapp.com>',
+	    domain: 'sandboxde091df17c3a43f18a3ac8367421432e.mailgun.org',
+	    apiKey: 'key-ea1fb115983b4f6fcdd57154d083023c',
 
-   ,
-  publicServerURL: 'https://peppequeue.herokuapp.com/parse',
-  verifyUserEmails: true,
-  appName: "peppequeue",
-  emailAdapter: {
-    module: 'parse-server-mailgun',
-    options: {
-      // The address that your emails come from
-      fromAddress: 'PeppeQ<noreply@yourapp.com>',
-      // Your domain from mailgun.com
-      domain: 'sandboxde091df17c3a43f18a3ac8367421432e.mailgun.org',
-      // Your API key from mailgun.com
-      apiKey: 'key-ea1fb115983b4f6fcdd57154d083023c',
-
-      // The template section
-      templates: {
-        passwordResetEmail: {
-          subject: 'Reset your password',
-          pathPlainText: resolve(__dirname, 'public/email-templates/password_reset_email.txt'),
-          pathHtml: resolve(__dirname, 'public/email-templates/password_reset_email.html'),
-          callback: (user) => { return { firstName: user.get('firstName') }}
-          // Now you can use {{firstName}} in your templates
-        },
-        verificationEmail: {
-          subject: 'Confirm your account',
-          pathPlainText: resolve(__dirname, 'public/email-templates/verification_email.txt'),
-          pathHtml: resolve(__dirname, 'public/email-templates/verification_email.html'),
-          callback: (user) => { return { firstName: user.get('firstName') }}
-          // Now you can use {{firstName}} in your templates
-        },
-        customEmailAlert: {
-          subject: 'Urgent notification!',
-          pathPlainText: resolve(__dirname, 'public/email-templates/custom_alert.txt'),
-          pathHtml: resolve(__dirname, 'public/email-templates/custom_alert.html'),
-        }
-      }
-  }
-});
-
-
+	    templates: {
+		passwordResetEmail: {
+		    subject: 'Reset your password',
+		    pathPlainText: resolve(__dirname, 'public/email-templates/password_reset_email.txt'),
+		    pathHtml: resolve(__dirname, 'public/email-templates/password_reset_email.html'),
+		    callback: (user) => { return { firstName: user.get('firstName') }}
+		    // Now you can use {{firstName}} in your templates
+		},
+		verificationEmail: {
+		    subject: 'Confirm your account',
+		    pathPlainText: resolve(__dirname, 'public/email-templates/verification_email.txt'),
+		    pathHtml: resolve(__dirname, 'public/email-templates/verification_email.html'),
+		    callback: (user) => { return { firstName: user.get('firstName') }}
+		    // Now you can use {{firstName}} in your templates
+		},
+		customEmailAlert: {
+		    subject: 'Urgent notification!',
+		    pathPlainText: resolve(__dirname, 'public/email-templates/custom_alert.txt'),
+		    pathHtml: resolve(__dirname, 'public/email-templates/custom_alert.html'),
+		}
+	    }
+	}
+    });
 
 
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
