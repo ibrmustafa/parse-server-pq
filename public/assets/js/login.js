@@ -20,7 +20,14 @@ Login.init = function() {
 
 	//initialize parse
 	Parse.initialize(Config.PARSE_APP_ID);
-  Parse.serverURL = Config.PARSE_SERVER_URL;
+    Parse.serverURL = Config.PARSE_SERVER_URL;
+	
+	$('#signInForm').validator();
+	$('#signUpForm').validator();
+	
+	$("#loader").css("display","none");
+	$("#signUpLoader").css("display","none");
+	
 }
 
 Login.clickSignUpButton = function(){
@@ -35,22 +42,25 @@ Login.clickSignUpButton = function(){
 
     // other fields can be set just like with Parse.Object
     user.set("phone", phone);
+	$("#signUpLoader").css("display","block");
 
     user.signUp(null, {
         success: function(user) {
-    // Hooray! Let them use the app now.
+    
         console.log("user successfully signed in" + user.id); 
+		$("#signUpMessage").text("User created successfully.Please Sign In to continue.");
+		$("#signUpLoader").css("display","none");
         setTimeout(function() { 
-            swal("", "User Added Successfully. Please login to continue!", "success");
-        }, 300);      
+             $("#signUpDiv").hide();
+		     $("#loginDiv").show();
+        }, 2000);      
        
-        $("#signUpDiv").hide();
-		$("#loginDiv").show();
+       
        },
        error: function(user, error) {
-    // Show the error message somewhere and let the user try again.
+       $("#signUpLoader").css("display","none");
        console.log("Error: " + error.code + " " + error.message);
-       swal("", error.message, "error");
+       $("#signUpMessage").text(error.message);
        
        }
     });
@@ -63,13 +73,18 @@ Login.signIn = function() {
 Login.clickSignInButton = function(){    
     var email = $("#signInEmail").val();
 	var password = $("#signInPassword").val();
+	$("#loader").css("display","block");
     Parse.User.logIn(email, password, {
       success: function(user) {
+		 $("#loader").css("display","none");
          window.location.href = "/dashboard";
+		 
       },
       error: function(user, error) {
+		$("#loader").css("display","none");
+		$("#signInMessage").text(error.message);
         console.log("Error: " + error.code + " " + error.message);
-        swal("", error.message, "error");
+        //swal("", error.message, "error");
       }
     });
 	
