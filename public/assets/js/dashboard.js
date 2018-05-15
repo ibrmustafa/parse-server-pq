@@ -3,15 +3,15 @@ function Dashboard(){
 }
 
 Dashboard.init = function() {
-	Parse.initialize("MyPeppeSampleApp");
-    Parse.serverURL = 'https://peppequeue-web-sample.herokuapp.com/parse';
+	Parse.initialize(Config.PARSE_APP_ID);
+  Parse.serverURL = Config.PARSE_SERVER_URL;
 	var currentUser = Parse.User.current();
-    if (currentUser) {
+  if (currentUser) {
       console.log(JSON.stringify(currentUser))
       $("#usernameLabel").text(currentUser.get("username"));
-    } else {
+  } else {
      window.location.href = "/";
-    }
+  }
 	$('#logoutLink').click(Dashboard.clickLogoutLink);
 }
 
