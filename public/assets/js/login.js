@@ -28,6 +28,9 @@ Login.init = function() {
 	$("#loader").css("display","none");
 	$("#signUpLoader").css("display","none");
 	
+  $("#signUpMessage").css("color", "red");
+  $("#signInMessage").css("color", "red");
+	
 }
 
 Login.clickSignUpButton = function(){
@@ -47,18 +50,16 @@ Login.clickSignUpButton = function(){
     user.signUp(null, {
         success: function(user) {
     
-        console.log("user successfully signed in" + user.id); 
-		$("#signUpMessage").text("User created successfully.Please Sign In to continue.");
+        console.log("user successfully signed Up" + user.id); 
+        $("#signUpMessage").css("color", "green");
+		    $("#signUpMessage").text("Your account has been created. Please check your inbox and confirm the email address");
 		$("#signUpLoader").css("display","none");
-        setTimeout(function() { 
-             $("#signUpDiv").hide();
-		     $("#loginDiv").show();
-        }, 2000);      
        
        
        },
        error: function(user, error) {
        $("#signUpLoader").css("display","none");
+        $("#signUpMessage").css("color", "red");
        console.log("Error: " + error.code + " " + error.message);
        $("#signUpMessage").text(error.message);
        
@@ -77,14 +78,25 @@ Login.clickSignInButton = function(){
     Parse.User.logIn(email, password, {
       success: function(user) {
 		 $("#loader").css("display","none");
-         window.location.href = "/dashboard";
+         console.log(JSON.stringify(user))
+         if(user.emailVerified == true){
+           window.location.href = "/dashboard";
+         }else{
+           $("#signInMessage").text("Please confirm your email before proceed.");
+         }
+         
 		 
       },
       error: function(user, error) {
 		$("#loader").css("display","none");
+         console.log("Error: " + error.code + " " + error.message);
+         if(error.code == 200){
+            $("#signInMessage").text("Email is required.");  
+         }else{
 		$("#signInMessage").text(error.message);
-        console.log("Error: " + error.code + " " + error.message);
-        //swal("", error.message, "error");
+         }
+		           
+
       }
     });
 	
