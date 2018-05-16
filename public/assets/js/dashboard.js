@@ -8,7 +8,7 @@ Dashboard.init = function() {
 	var currentUser = Parse.User.current();
   if (currentUser) {
       console.log(JSON.stringify(currentUser))
-      $("#usernameLabel").text(currentUser.get("username"));
+      $("#usernameLabel").text(currentUser.get("name"));
   } else {
      window.location.href = "/";
   }

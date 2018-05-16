@@ -8,10 +8,14 @@ Login.init = function() {
 			console.log("clicked");
 			$("#loginDiv").hide();
 			$("#signUpDiv").show();
+      $('#signUpForm').validator('destroy');
+      $('#signUpForm').validator();
 	});
 	$("#newLogin").click(function() {				
 			$("#signUpDiv").hide();
 			$("#loginDiv").show();
+      $('#signInForm').validator('destroy');
+      $('#signInForm').validator();
 	});
 
 	$('#signInButton').click(Login.clickSignInButton);
@@ -30,6 +34,15 @@ Login.init = function() {
 	
   $("#signUpMessage").css("color", "red");
   $("#signInMessage").css("color", "red");
+  $('#signInButton').prop('disabled', true);
+
+  $('#signInForm').on('valid.bs.validator', function(){      
+      $('#signInButton').prop('disabled', false);
+  });
+
+  $('#signInForm').on('invalid.bs.validator', function(){      
+      $('#signInButton').prop('disabled', true);
+  });
 	
 }
 
