@@ -37,16 +37,19 @@ Login.clickSignUpButton = function(){
 	var email = $("#signUpEmail").val();
 	var phone = $("#signUpPhone").val();
 	var password = $("#signUpPassword").val();
+        var name = $("#signUpName").val();
+  
 
     var user = new Parse.User();
     user.set("username", email);
     user.set("password", password);
     user.set("email", email);
-
-    // other fields can be set just like with Parse.Object
+    user.set("name",name);
     user.set("phone", phone);
-	$("#signUpLoader").css("display","block");
 
+    var errors = $('#signUpForm').validator('validate').has('.has-error').length;
+    if(errors === 0){
+	$("#signUpLoader").css("display","block");
     user.signUp(null, {
         success: function(user) {
     
@@ -67,13 +70,16 @@ Login.clickSignUpButton = function(){
     });
 }
 
-Login.signIn = function() {
-	window.location.href = "../User/Login";
+    
 }
+
 
 Login.clickSignInButton = function(){    
     var email = $("#signInEmail").val();
-	var password = $("#signInPassword").val();
+	var password = $("#signInPassword").val();  
+  
+  var errors = $('#signInForm').validator('validate').has('.has-error').length;
+  if(errors === 0){
 	$("#loader").css("display","block");
     Parse.User.logIn(email, password, {
       success: function(user) {
@@ -99,6 +105,7 @@ Login.clickSignInButton = function(){
 
       }
     });
+  } 
 	
 	
 }
