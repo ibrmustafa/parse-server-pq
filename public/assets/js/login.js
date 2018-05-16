@@ -79,7 +79,7 @@ Login.clickSignInButton = function(){
       success: function(user) {
 		 $("#loader").css("display","none");
          console.log(JSON.stringify(user))
-         if(user.emailVerified == true){
+         if(user.get("emailVerified") == true){
            window.location.href = "/dashboard";
          }else{
            $("#signInMessage").text("Please confirm your email before proceed.");
