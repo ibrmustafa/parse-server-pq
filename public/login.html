@@ -60,7 +60,7 @@
                 <label class="checkbox pull-left">                  
                 </label>
 				
-                <a href="#" class="pull-right need-help">Forgot password? </a><span class="clearfix"></span>
+                <a href="#" class="pull-right need-help" id="forgotPasswordLink">Forgot password? </a><span class="clearfix"></span>
                 
 				</form>
 				
@@ -116,6 +116,41 @@
 			   
              <div><span class="new-account">You already have an account ? <a href="#" id="newLogin" class="text-center"> Sign In </a></span></div>
         </div>
+
+
+
+           <div class="col-sm-6 col-md-4 col-md-offset-4" id="forgotPasswordDiv">
+            
+            <div class="account-wall">
+                
+				<img class="" src="assets/images/peppeq.png" alt="logo">
+				<p class="text-danger" align="center" id="forgotPasswordMessage"></p>
+				<div class="center-block loader " id="forgotPasswordLoader"></div>
+				<form class="form-signin" data-toggle="validator" role="form" id="forgotPasswordForm">
+				
+				<div class="form-group">				
+                <input type="email" id="forgotPasswordEmail" class="form-control" placeholder="Email" data-error="Invalid email Address" required>
+				 <div class="help-block with-errors"></div>
+				</div>
+				
+				
+                <button id="forgotPasswordButton" class="btn btn-lg btn-primary btn-block"  type="reset">
+                    Reset Password</button>
+					
+				
+                
+				</form>
+				
+            </div>
+			
+             <a href="#" id="signInForgotPasswordForm" class="text-center new-account">Sign In </a>
+			
+        </div>
+
+
+
+
+
     </div>
 </div>
 
