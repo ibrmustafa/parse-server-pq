@@ -5,8 +5,7 @@ function Login(){
 Login.init = function() {
 	$("#signUpDiv").hide();
   $("#forgotPasswordDiv").hide();
-	$("#newSignUp").click(function() {		    
-			console.log("clicked");
+	$("#newSignUp").click(function() {			
 			$("#loginDiv").hide();
 			$("#signUpDiv").show();
       $("#forgotPasswordDiv").hide();
@@ -154,7 +153,7 @@ Login.clickForgotPasswordButton = function(){
        success: function() {
         $("#forgotPasswordMessage").css("color", "green");
         $("#forgotPasswordMessage").text("Password reset link has been sent."); 
-        alert("success");
+        $("#forgotPasswordLoader").css("display","none");
        },
         error: function(error) {
           $("#forgotPasswordMessage").css("color", "red");
