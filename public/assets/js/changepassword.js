@@ -46,9 +46,20 @@ ChangePassword.clickChangePasswordButton = function(){
          $("#changePasswordLoader").css("display","none");
          console.log(JSON.stringify(user));
          $("#changePasswordMessage").text("");  
+         var newPassword = $("#newPassword").val();
+         user.set('password') = newPassword;
+         user.save(null,{success:function(obj){
+               console.log(JSON.stringify(obj));
+              $("#changePasswordMessage").css("color", "green");
+              $("#changePasswordMessage").text("Password Changed Successfully."); 
+         },error:function(obj,err){
+              console.log(JSON.stringify(err));
+              $("#changePasswordMessage").text("Error changing password."); 
+         }});
 
       },
       error: function(user, error) {
+         $("#changePasswordMessage").css("color", "red");
          $("#changePasswordLoader").css("display","none");
          console.log("Error: " + error.code + " " + error.message);
          if(error.code == 101){
@@ -57,6 +68,18 @@ ChangePassword.clickChangePasswordButton = function(){
                
 
       }
+    });
+
+    var newPassword = $("#newPassword").val();
+    currentUser.set('password',newPassword);
+    currentUser.save(null,{success:function(obj){
+               console.log(JSON.stringify(obj));
+              $("#changePasswordMessage").css("color", "green");
+              $("#changePasswordMessage").text("Password Changed Successfully."); 
+         },error:function(obj,err){
+              console.log(JSON.stringify(err));
+              $("#changePasswordMessage").text("Error changing password."); 
+         }
     });
 }
 

@@ -6,6 +6,7 @@ Login.init = function() {
 	$("#signUpDiv").hide();
   $("#forgotPasswordDiv").hide();
 	$("#newSignUp").click(function() {			
+			console.log("clicked");
 			$("#loginDiv").hide();
 			$("#signUpDiv").show();
       $("#forgotPasswordDiv").hide();
