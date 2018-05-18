@@ -41,21 +41,13 @@ ChangePassword.clickChangePasswordButton = function(){
   var email = currentUser.get('email');
   var password = $("#currentPassword").val();
   $("#changePasswordLoader").css("display","block");
+  var currentPasswordVerified = false;
   Parse.User.logIn(email, password, {
       success: function(user) {
          $("#changePasswordLoader").css("display","none");
          console.log(JSON.stringify(user));
          $("#changePasswordMessage").text("");  
-         var newPassword = $("#newPassword").val();
-         user.set('password') = newPassword;
-         user.save(null,{success:function(obj){
-               console.log(JSON.stringify(obj));
-              $("#changePasswordMessage").css("color", "green");
-              $("#changePasswordMessage").text("Password Changed Successfully."); 
-         },error:function(obj,err){
-              console.log(JSON.stringify(err));
-              $("#changePasswordMessage").text("Error changing password."); 
-         }});
+         currentPasswordVerified = true;
 
       },
       error: function(user, error) {
@@ -71,16 +63,31 @@ ChangePassword.clickChangePasswordButton = function(){
     });
 
     var newPassword = $("#newPassword").val();
-    currentUser.set('password',newPassword);
-    currentUser.save(null,{success:function(obj){
+    var repeatPassword = $("#repeatPassword").val();
+
+    var errors = $('#changePasswordForm').validator('validate').has('.has-error').length;
+
+    if(errors === 0){
+      if((newPassword == repeatPassword) && currentPasswordVerified){
+      currentUser.set('password',newPassword);
+      currentUser.save(null,{success:function(obj){
                console.log(JSON.stringify(obj));
               $("#changePasswordMessage").css("color", "green");
               $("#changePasswordMessage").text("Password Changed Successfully."); 
          },error:function(obj,err){
               console.log(JSON.stringify(err));
+              $("#changePasswordMessage").css("color", "red");
               $("#changePasswordMessage").text("Error changing password."); 
          }
     });
+    }else{
+        $("#changePasswordMessage").css("color", "red");
+        $("#changePasswordMessage").text("Please enter required details."); 
+    }
+    }
+
+    
+    
 }
 
 
