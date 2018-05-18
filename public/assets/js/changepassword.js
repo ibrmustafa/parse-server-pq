@@ -66,9 +66,9 @@ ChangePassword.clickChangePasswordButton = function(){
     var repeatPassword = $("#repeatPassword").val();
 
     var errors = $('#changePasswordForm').validator('validate').has('.has-error').length;
-
+    console.log(errors);
     if(errors === 0){
-      if((newPassword == repeatPassword) && currentPasswordVerified){
+      if((newPassword == repeatPassword) ){
       currentUser.set('password',newPassword);
       currentUser.save(null,{success:function(obj){
                console.log(JSON.stringify(obj));
