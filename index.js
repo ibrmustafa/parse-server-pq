@@ -20,6 +20,7 @@ var api = new ParseServer({
     masterKey: process.env.MASTER_KEY,
     publicServerURL: process.env.SERVER_URL,
     verifyUserEmails: true,
+    preventLoginWithUnverifiedEmail:true,
     appName: "peppequeue",
     
     emailAdapter: {
