@@ -20,6 +20,7 @@ var api = new ParseServer({
     masterKey: process.env.MASTER_KEY,
     publicServerURL: process.env.SERVER_URL,
     verifyUserEmails: true,
+    preventLoginWithUnverifiedEmail:true,
     appName: "peppequeue",
     
     emailAdapter: {
@@ -69,6 +70,10 @@ app.get('/', function (req, res) {
 
 app.get('/dashboard', function(req, res) {  
    res.sendFile(path.join(__dirname, '/public/dashboard.html'));
+});
+
+app.get('/changepassword', function(req, res) {  
+   res.sendFile(path.join(__dirname, '/public/changePassword.html'));
 });
 
 

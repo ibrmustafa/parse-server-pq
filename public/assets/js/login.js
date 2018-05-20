@@ -4,19 +4,46 @@ function Login(){
 
 Login.init = function() {
 	$("#signUpDiv").hide();
-	$("#newSignUp").click(function() {		    
+  $("#forgotPasswordDiv").hide();
+	$("#newSignUp").click(function() {			
 			console.log("clicked");
 			$("#loginDiv").hide();
 			$("#signUpDiv").show();
+      $("#forgotPasswordDiv").hide();
+      $('#signUpForm').validator('destroy');
+      $('#signUpForm').validator();
 	});
 	$("#newLogin").click(function() {				
 			$("#signUpDiv").hide();
 			$("#loginDiv").show();
+      $("#forgotPasswordDiv").hide();
+      $('#signInForm').validator('destroy');
+      $('#signInForm').validator();
 	});
+
+  $("#forgotPasswordLink").click(function() {       
+      $("#signUpDiv").hide();
+      $("#loginDiv").hide();
+      $("#forgotPasswordDiv").show();
+      $("#forgotPasswordMessage").text(""); 
+      $('#forgotPasswordForm').validator('destroy');
+      $('#forgotPasswordForm').validator();
+  });
+
+  $("#signInForgotPasswordForm").click(function() {       
+      $("#signUpDiv").hide();
+      $("#loginDiv").show();
+       $("#forgotPasswordDiv").hide();
+      $('#signInForm').validator('destroy');
+      $('#signInForm').validator();
+  });
+  
+  
+
 
 	$('#signInButton').click(Login.clickSignInButton);
     $('#signUpButton').click(Login.clickSignUpButton);
-    $('#forgotPasswordLink').click(Login.clickForgotPasswordLink);
+  $('#forgotPasswordButton').click(Login.clickForgotPasswordButton);
 
 	//initialize parse
 	Parse.initialize(Config.PARSE_APP_ID);
@@ -27,6 +54,19 @@ Login.init = function() {
 	
 	$("#loader").css("display","none");
 	$("#signUpLoader").css("display","none");
+  $("#forgotPasswordLoader").css("display","none");
+	
+  $("#signUpMessage").css("color", "red");
+  $("#signInMessage").css("color", "red");
+  $('#signInButton').prop('disabled', false);
+
+  $('#signInForm').on('valid.bs.validator', function(){      
+      $('#signInButton').prop('disabled', false);
+  });
+
+  $('#signInForm').on('invalid.bs.validator', function(){      
+      $('#signInButton').prop('disabled', true);
+  });
 	
 }
 
@@ -34,31 +74,32 @@ Login.clickSignUpButton = function(){
 	var email = $("#signUpEmail").val();
 	var phone = $("#signUpPhone").val();
 	var password = $("#signUpPassword").val();
+  var name = $("#signUpName").val();
+  
 
     var user = new Parse.User();
     user.set("username", email);
     user.set("password", password);
     user.set("email", email);
-
-    // other fields can be set just like with Parse.Object
+    user.set("name",name);
     user.set("phone", phone);
-	$("#signUpLoader").css("display","block");
 
-    user.signUp(null, {
+    var errors = $('#signUpForm').validator('validate').has('.has-error').length;
+    if(errors === 0){
+	    $("#signUpLoader").css("display","block");
+      user.signUp(null, {
         success: function(user) {
     
-        console.log("user successfully signed in" + user.id); 
-		$("#signUpMessage").text("User created successfully.Please Sign In to continue.");
-		$("#signUpLoader").css("display","none");
-        setTimeout(function() { 
-             $("#signUpDiv").hide();
-		     $("#loginDiv").show();
-        }, 2000);      
+        console.log("user successfully signed Up" + user.id); 
+        $("#signUpMessage").css("color", "green");
+		    $("#signUpMessage").text("Your account has been created. Please check your inbox and confirm the email address");
+		    $("#signUpLoader").css("display","none");
        
        
        },
        error: function(user, error) {
        $("#signUpLoader").css("display","none");
+        $("#signUpMessage").css("color", "red");
        console.log("Error: " + error.code + " " + error.message);
        $("#signUpMessage").text(error.message);
        
@@ -66,40 +107,59 @@ Login.clickSignUpButton = function(){
     });
 }
 
-Login.signIn = function() {
-	window.location.href = "../User/Login";
+    
 }
+
 
 Login.clickSignInButton = function(){    
     var email = $("#signInEmail").val();
-	var password = $("#signInPassword").val();
+	var password = $("#signInPassword").val();  
+  
+  var errors = $('#signInForm').validator('validate').has('.has-error').length;
+  if(errors === 0){
 	$("#loader").css("display","block");
     Parse.User.logIn(email, password, {
       success: function(user) {
 		 $("#loader").css("display","none");
-         window.location.href = "/dashboard";
+         console.log(JSON.stringify(user))
+         if(user.get("emailVerified") == true){
+           window.location.href = "/dashboard";
+         }else{
+           $("#signInMessage").text("Please confirm your email before proceed.");
+         }
+         
 		 
       },
       error: function(user, error) {
 		$("#loader").css("display","none");
+         console.log("Error: " + error.code + " " + error.message);
+         if(error.code == 200){
+            $("#signInMessage").text("Email is required.");  
+         }else{
 		$("#signInMessage").text(error.message);
-        console.log("Error: " + error.code + " " + error.message);
-        //swal("", error.message, "error");
+         }
+		           
+
       }
     });
+  } 
 	
 	
 }
 
-Login.clickForgotPasswordLink = function(){    
-    var email = $("#signUpEmail").val();
+Login.clickForgotPasswordButton = function(){    
+  var email = $("#forgotPasswordEmail").val();
+  $("#forgotPasswordLoader").css("display","block");
 	Parse.User.requestPasswordReset(email, {
        success: function() {
-        alert("success");
+        $("#forgotPasswordMessage").css("color", "green");
+        $("#forgotPasswordMessage").text("Password reset link has been sent."); 
+        $("#forgotPasswordLoader").css("display","none");
        },
         error: function(error) {
-    // Show the error message somewhere
-        alert("Error: " + error.code + " " + error.message);
+          $("#forgotPasswordMessage").css("color", "red");
+          $("#forgotPasswordMessage").text(error.message); 
+          $("#forgotPasswordLoader").css("display","none");
        }
    });
 	
