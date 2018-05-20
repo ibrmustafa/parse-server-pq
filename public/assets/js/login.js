@@ -47,7 +47,10 @@ Login.init = function() {
 
 	//initialize parse
 	Parse.initialize(Config.PARSE_APP_ID);
-    Parse.serverURL = Config.PARSE_SERVER_URL;
+  Parse.serverURL = Config.PARSE_SERVER_URL;
+
+  //clear user local datastorage
+  Parse.User.logOut();
 	
 	$('#signInForm').validator();
 	$('#signUpForm').validator();
